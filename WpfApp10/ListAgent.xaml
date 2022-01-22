@@ -36,19 +36,19 @@
         </Grid.Resources>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="8*" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0" TextChanged="TextBox_TextChanged"></TextBox>
-            <ComboBox Grid.Column="1" VerticalAlignment="Top" SelectionChanged="ComboBox_SelectionChanged" Text="Сортировка">
+            <ComboBox Grid.Column="1" VerticalAlignment="Center" SelectionChanged="ComboBox_SelectionChanged" Text="Сортировка">
                 
                 <ComboBoxItem Tag="0" x:Name="cmbSort" >
                     <TextBlock  Text="Без сортировки" ></TextBlock>
@@ -67,7 +67,7 @@
                 </ComboBoxItem>
 
             </ComboBox>
-            <ComboBox x:Name="TypeCmb"  Grid.Column="2"  Width="100" HorizontalAlignment="Left" VerticalAlignment="Center" ItemsSource="{Binding}" SelectionChanged="TypeCmb_SelectionChanged">
+            <ComboBox x:Name="TypeCmb"  Grid.Column="2"  Width="auto" HorizontalAlignment="Left" VerticalAlignment="Center" ItemsSource="{Binding}" SelectionChanged="TypeCmb_SelectionChanged">
                 
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -106,8 +106,6 @@
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
