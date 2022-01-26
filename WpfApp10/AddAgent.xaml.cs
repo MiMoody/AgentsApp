@@ -200,7 +200,7 @@ namespace WpfApp10
             string fnd = ((TextBox)sender).Text;
             try
             {
-                product.ItemsSource = helper.GetContext().ProductType.Where(Product => Product.Title.Contains(fnd)).ToList();
+                product.ItemsSource = helper.GetContext().Product.Where(Product => Product.Title.Contains(fnd)).ToList();
             }
             catch { };
 

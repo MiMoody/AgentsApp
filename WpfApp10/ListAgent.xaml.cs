@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace WpfApp10
 {
@@ -56,7 +57,7 @@ namespace WpfApp10
                 }
                 else
                 {
-                    var agg = ag.Where((Agent => Agent.AgentTypeID == iag));
+                    var agg = ag.Where(Agent => Agent.AgentTypeID == iag);
                     fullCount = agg.Count();
                     if (order == 0) agentGrid.ItemsSource = agg.OrderBy(Agent => Agent.ID).Skip(start * 10).Take(10).ToList();
                     if (order == 1) agentGrid.ItemsSource = agg.OrderBy(Agent => Agent.Title).Skip(start * 10).Take(10).ToList();
@@ -166,36 +167,6 @@ namespace WpfApp10
             Load();
 
         }
-        private void phonesGrid_LoadingRow(object sender, DataGridRowEventArgs e)
-        {
-            Agent agent = (Agent)e.Row.DataContext;
-            int sum = 0;
-            double fsum = 0;
-            foreach (ProductSale ps in agent.ProductSale)
-            {
-                List<ProductMaterial> mtr = new List<ProductMaterial> { };
-                mtr = helper.GetContext().ProductMaterial.Where(ProductMaterial => ProductMaterial.ProductID == ps.ProductID).ToList();
-                foreach (ProductMaterial mt in mtr)
-                {
-                    double f = decimal.ToDouble(mt.Material.Cost);
-                    fsum += f * (double)mt.Count;
-                }
-                fsum = fsum * ps.ProductCount;
-                if (ps.SaleDate.AddDays(365).CompareTo(DateTime.Today) > 0)
-                    sum += ps.ProductCount;
-            }
-            agent.sale = sum;
-            agent.percent = 0;
-            if (fsum >= 10000 && fsum < 50000) agent.percent = 5;
-            if (fsum >= 50000 && fsum < 150000) agent.percent = 10;
-            if (fsum >= 150000 && fsum < 500000) agent.percent = 20;
-            if (fsum >= 500000) agent.percent = 25;
-            if (agent.percent == 25)
-            {
-                SolidColorBrush hb = new SolidColorBrush(Colors.LightGreen);
-                e.Row.Background = hb;
-            };
-        }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -233,5 +204,37 @@ namespace WpfApp10
             }
 
         }
+
+        private void agentGrid_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            Agent agent = (Agent)e.Row.DataContext;
+            int sum = 0;
+            double fsum = 0;
+            foreach (ProductSale ps in agent.ProductSale)
+            {
+                List<ProductMaterial> mtr = new List<ProductMaterial> { };
+                mtr = helper.GetContext().ProductMaterial.Where(ProductMaterial => ProductMaterial.ProductID == ps.ProductID).ToList();
+                foreach (ProductMaterial mt in mtr)
+                {
+                    double f = decimal.ToDouble(mt.Material.Cost);
+                    fsum += f * (double)mt.Count;
+                }
+                fsum = fsum * ps.ProductCount;
+                if (ps.SaleDate.AddDays(365).CompareTo(DateTime.Today) > 0)
+                    sum += ps.ProductCount;
+            }
+            agent.sale = sum;
+            agent.percent = 0;
+            if (fsum >= 10000 && fsum < 50000) agent.percent = 5;
+            if (fsum >= 50000 && fsum < 150000) agent.percent = 10;
+            if (fsum >= 150000 && fsum < 500000) agent.percent = 20;
+            if (fsum >= 500000) {
+                agent.percent = 25;
+                SolidColorBrush hb = new SolidColorBrush(Colors.LightGreen);
+                e.Row.Background = hb;
+            }
+
+        }
+
     }
 }
